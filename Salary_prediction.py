@@ -31,4 +31,11 @@ df1=pd.DataFrame({
 w=reg.predict(df1)
 df1['salary($']=w
 
+#pickling
+import pickle
 
+with open('multi1_pickle','wb') as f:
+    pickle.dump(reg,f)
+with open('multi1_pickle','rb') as k:
+    multi1=pickle.load(k)
+print(multi1.predict([[2,9,6]]))
