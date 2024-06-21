@@ -30,9 +30,12 @@ z=reg.predict(df1)
 df1['price']=z
 df2=pd.concat([df,df1],ignore_index=True)
 
-# import matplotlib.pyplot as plt
-# plt.xlabel('Price')
-# plt.ylabel('Age')
-# plt.title('based on the age price prediction')
-# plt.plot(df2.age,df2.price,color='green',marker='+')
-# plt.show()
+import pickle
+
+with open('multi2_pickle','wb') as f:
+    pickle.dump(reg,f)
+
+with open('multi2_pickle','rb') as k:
+    multi2=pickle.load(k)
+
+print(multi2.predict([[3800,4,40]]))
