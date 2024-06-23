@@ -11,29 +11,17 @@ df=pd.DataFrame({
 from sklearn.preprocessing import OneHotEncoder
 ohe=OneHotEncoder(handle_unknown='ignore',sparse_output=False).set_output(transform='pandas')
 ohe_transform=ohe.fit_transform(df[['town']])
-#print(ohe_transform)
 new_df=pd.concat([ohe_transform,df],axis='columns')
-#print(new_df.columns)
-new=new_df.drop(['town_west windsor','town'],axis='columns')
-#print(new)
-x=new.iloc[:,:-1]
-y=new.iloc[:,-1]
+#in order to avoid multi-coliner issue we drop town and one hot encoder columns
+new_df=new_df.drop(['town','town_monore township'],axis='columns')
+x=new_df.iloc[:,:-1]
+y=new_df.iloc[:,-1]
 from sklearn import linear_model
 reg=linear_model.LinearRegression()
 reg.fit(x,y)
-#lets pridict value for monore township
-#print(reg.predict([[1,0,2600]]))
-#lets pridict value for west windsor township
-#print(reg.predict([[0,0,2600]]))#[579723.71533004]
+reg.coef_#[25686.4115244  40013.97548914   126.89744141]
+reg.intercept_#209776.39217373414
+reg.predict([[0,0,2600]])#[539709.7398409]
 #cross validation
 #y=mx+b
-reg.coef_#[-40013.97548914 -14327.56396474    126.89744141]
-reg.intercept_#249790.36766286375
-#print(126.89744141*2600+249790.36766286375)579723.7153288638
-#print(reg.score(x,y))
-import pickle
-with open('pick_encode','wb') as f:
-    pickle.dump(reg,f)
-with open('pick_encode','rb')as k:
-    _pred=pickle.load(k)
-print(_pred.predict([[0,0,2600]]))
+print(reg.score(x,y))
